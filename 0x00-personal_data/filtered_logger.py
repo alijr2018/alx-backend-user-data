@@ -3,7 +3,6 @@
 import re
 import logging
 from typing import List
-import csv
 import os
 from mysql.connector import MySQLConnection
 import mysql.connector
