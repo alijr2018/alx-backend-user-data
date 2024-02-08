@@ -3,6 +3,7 @@
 import re
 import logging
 from typing import List
+import csv
 
 
 class RedactingFormatter(logging.Formatter):
@@ -36,7 +37,7 @@ def filter_datum(fields: List[str], redaction: str, message: str,
 PII_FIELDS = ("name", "email", "phone", "ssn", "credit_card")
 
 
-def get_logger():
+def get_logger() -> logging.Logger:
     """
     function that takes no arguments and returns a logging.Logger object.
     """
