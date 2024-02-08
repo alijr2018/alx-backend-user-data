@@ -2,6 +2,7 @@
 """filtered_logger.py"""
 import re
 import logging
+from typing import List
 
 
 class RedactingFormatter(logging.Formatter):
@@ -22,7 +23,8 @@ class RedactingFormatter(logging.Formatter):
                             self.REDACTION, log_message, self.SEPARATOR)
 
 
-def filter_datum(fields, redaction, message, separator):
+def filter_datum(fields: List[str], redaction: str, message: str,
+                 separator: str) -> str:
     """The function use a regex to replace occurrences field values."""
     return re.sub(fr'(\b(?:{"|".join(fields)})=)[^{separator}]+',
                   fr'\1{redaction}', message)
