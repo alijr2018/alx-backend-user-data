@@ -5,7 +5,7 @@ encrypt_password.py
 import bcrypt
 
 
-def hash_password(password):
+def hash_password(password: str) -> bytes:
     """
     Retrun hash_passwrod
     """
