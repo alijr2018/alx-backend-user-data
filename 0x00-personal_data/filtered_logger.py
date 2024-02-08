@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-filtered_logger.py
-"""
+"""filtered_logger.py"""
 import re
 
 
