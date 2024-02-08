@@ -35,7 +35,7 @@ def filter_datum(fields: List[str], redaction: str, message: str,
     """The function use a regex to replace occurrences field values."""
     for field in fields:
         msg = re.sub(fr'(\b(?:{"|".join(fields)})=)[^{separator}]+',
-                  fr'\1{redaction}', message)
+                     fr'\1{redaction}', message)
         return msg
 
 
@@ -77,6 +77,7 @@ def get_db() -> MySQLConnection:
 
     return db
 
+
 def main():
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
@@ -97,6 +98,7 @@ def main():
 
     cursor.close()
     db.close()
+
 
 if __name__ == "__main__":
     main()
