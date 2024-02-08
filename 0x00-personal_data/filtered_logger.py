@@ -34,7 +34,7 @@ def filter_datum(fields: List[str], redaction: str, message: str,
                  separator: str) -> str:
     """The function use a regex to replace occurrences field values."""
     for field in fields:
-        msg = re.sub(fr'(\b(?:{"|".join(fields)})=)[^{separator}]+',
+        msg = re.sub(fr'(\b(?:{"|".join(field)})=)[^{separator}]+',
                      fr'\1{redaction}', message)
         return msg
 
@@ -51,7 +51,7 @@ def get_logger() -> logging.Logger:
     logger.propagate = False
 
     stream_handler = logging.StreamHandler()
-    formatter = RedactingFormatter(list(PII_FIELDS))
+    formatter = RedactingFormatter(fields=PII_FIELDS)
     stream_handler.setFormatter(formatter)
 
     logger.addHandler(stream_handler)
