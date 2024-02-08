@@ -5,7 +5,9 @@ import logging
 from typing import List
 import csv
 import os
+from mysql.connector import MySQLConnection
 import mysql.connector
+
 
 
 class RedactingFormatter(logging.Formatter):
@@ -55,7 +57,8 @@ def get_logger() -> logging.Logger:
 
     return logger
 
-def get_db() -> mysql.connector.connection.MYSQLConnection:
+
+def get_db() -> MySQLConnection:
     username = os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
     password = os.environ.get('PERSONAL_DATA_DB_PASSWORD', '')
     host = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
