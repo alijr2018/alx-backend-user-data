@@ -79,6 +79,9 @@ def get_db() -> MySQLConnection:
 
 
 def main():
+    """
+    main
+    """
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
     logger.propagate = False
