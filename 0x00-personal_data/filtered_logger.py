@@ -9,7 +9,6 @@ from mysql.connector import MySQLConnection
 import mysql.connector
 
 
-
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
         """
