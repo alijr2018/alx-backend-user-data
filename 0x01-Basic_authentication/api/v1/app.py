@@ -48,7 +48,7 @@ def Forbidden(error) -> str:
 
 
 @app.before_request
-def before_request():
+def authenticate_user():
     """
     handler before_request
     """
