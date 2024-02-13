@@ -2,7 +2,6 @@
 """ Module of auth
 """
 from flask import request
-from api.v1.views import app_views
 from typing import List, TypeVar
 
 
@@ -26,6 +25,7 @@ class Auth:
         if request is not None:
             return request.headers.get('Authorisation', None)
         return None
+    
 
     def current_user(self, request=None) -> TypeVar('User'):
         """
