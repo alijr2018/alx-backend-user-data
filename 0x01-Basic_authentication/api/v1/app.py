@@ -41,6 +41,9 @@ def Forbidden(error) -> str:
 
 @app.before_request
 def before_request():
+    """
+    handler before_request
+    """
     if auth is None:
         return None
     allowed_paths = ['/api/v1/status/',
