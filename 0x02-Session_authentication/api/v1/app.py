@@ -60,10 +60,15 @@ def before_request():
         request.path not in allowed_paths and
         not auth.require_auth(request.path, allowed_paths)
     ):
-        return
+        return jsonify({"error": "Not found"}), 404
 
-    if auth.authorization_header(request) is None:
+    if (
+        auth.authorization_header(request) is None
+        and auth.session_cookie(request) is None
+    ):
         abort(401)
+
+    current_user = auth.current_user(request)
 
     if auth.current_user(request) is None:
         abort(403)
