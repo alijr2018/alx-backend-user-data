@@ -56,21 +56,24 @@ def before_request():
     allowed_paths = ['/api/v1/status/',
                      '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
-    if not auth.require_auth(request.path, excluded_paths):
-        return
-    # If auth.authorization_header(request) and auth.session_cookie(request)
-    # return None, raise the error, 401 - you must use abort
-    auth_header = auth.authorization_header(request)
-    session_cookie = auth.session_cookie(request)
-    if auth_header is None and session_cookie is None:
+    if (
+        request.path not in allowed_paths and
+        not auth.require_auth(request.path, allowed_paths)
+    ):
+        return jsonify({"error": "Not found"}), 404
+
+    if (
+        auth.authorization_header(request) is None and
+        auth.session_cookie(request) is None
+    ):
         abort(401)
-    # If auth.current_user(request) returns None, raise the error 403 - you
-    # must use abort
-    user = auth.current_user(request)
-    if user is None:
+
+    current_user = auth.current_user(request)
+
+    if auth.current_user(request) is None:
         abort(403)
-    # Assign the result of auth.current_user(request) to request.current_user
-    request.current_user = user
+
+    request.current_user = auth.current_user(request)
 
 
 if __name__ == "__main__":
