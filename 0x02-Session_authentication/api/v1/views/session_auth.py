@@ -2,15 +2,16 @@
 """
 Session authentication view module
 """
-
-from flask import jsonify, request
+import os
+from typing import Tuple
+from flask import jsonify, request, abort
 from api.v1.views import app_views
 from models.user import User
 from api.v1.app import auth
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
-def session_login() -> str:
+def session_login() -> Tuple[str, int]:
     """
     Session login route
     """
