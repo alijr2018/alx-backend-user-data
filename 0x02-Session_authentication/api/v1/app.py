@@ -64,10 +64,9 @@ def before_request():
     ):
         return jsonify({"error": "Not found"}), 404
 
-    if (
-        auth.authorization_header(request) is None and
-        auth.session_cookie(request) is None
-    ):
+    auth_header = auth.authorization_header(request)
+    session_cookie = auth.session_cookie(request)
+    if auth_header is None and session_cookie is None:
         abort(401)
 
     current_user = auth.current_user(request)
