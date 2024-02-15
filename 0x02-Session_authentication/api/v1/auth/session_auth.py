@@ -7,6 +7,7 @@ from models.user import User
 import uuid
 
 
+
 class SessionAuth(Auth):
     """
     class session auth
