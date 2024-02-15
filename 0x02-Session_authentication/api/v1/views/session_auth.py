@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-handles all routes for the Session authentication.
+New view for Session Authentication
 """
 from flask import Flask, request, jsonify, make_response
 from api.v1.views import app_views
