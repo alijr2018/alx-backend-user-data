@@ -1,27 +1,25 @@
 #!/usr/bin/env python3
 """
-New view for Session Authentication
+Session authentication view module
 """
-from flask import Flask, request, jsonify, make_response
-from api.v1.views import app_views
-from api.v1.auth.session_auth import SessionAuth
-from models.user import User
-import os
 
-auth = SessionAuth()
-app = Flask(__name__)
+from flask import jsonify, request
+from api.v1.views import app_views
+from models.user import User
+from api.v1.app import auth
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
-def auth_session_login():
+def session_login() -> str:
     """
-    Handles user authentication for session
+    Session login route
     """
     email = request.form.get("email")
     password = request.form.get("password")
 
     if not email:
         return jsonify({"error": "email missing"}), 400
+
     if not password:
         return jsonify({"error": "password missing"}), 400
 
@@ -33,9 +31,8 @@ def auth_session_login():
         return jsonify({"error": "wrong password"}), 401
 
     session_id = auth.create_session(user[0].id)
-    user_json = user[0].to_json()
-    response = make_response(jsonify(user_json), 200)
-    response.set_cookie(os.getenv("SESSION_NAME", "_my_session_id"),
-                        session_id)
+    user_dict = user[0].to_json()
+    response = jsonify(user_dict)
+    response.set_cookie(auth.session_cookie_name, session_id)
 
     return response
