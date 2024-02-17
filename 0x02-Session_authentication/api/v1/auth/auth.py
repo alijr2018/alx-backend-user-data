@@ -3,12 +3,19 @@
 """
 from flask import request
 from typing import List, TypeVar
+import os
 
 
 class Auth:
     """
     Auth class.
     """
+    def __init__(self):
+        """
+        init
+        """
+        self.session_name = os.getenv('SESSION_NAME', '_my_session_id')
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """
         returns False - path
@@ -40,4 +47,12 @@ class Auth:
         """
         returns None - request
         """
+        return None
+
+    def session_cookie(self, request=None):
+        """
+        session cookie
+        """
+        if request is not None:
+            return request.cookies.get(self.session_name, None)
         return None
