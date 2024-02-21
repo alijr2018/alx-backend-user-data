@@ -1,4 +1,7 @@
-# auth module
+#!/usr/bin/env python3
+"""
+auth.py
+"""
 import bcrypt
 
 
