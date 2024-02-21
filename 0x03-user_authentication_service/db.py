@@ -62,6 +62,5 @@ class DB:
                 else:
                     raise ValueError
             self._session.commit()
-        except InvalidRequestError:
-            self._session.rollback()
-            raise ValueError("Invalid query arguments")
+        except NoResultFound:
+            raise ValueError
