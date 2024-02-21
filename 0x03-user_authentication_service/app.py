@@ -2,7 +2,7 @@
 """
 app.py
 """
-from flask import Flask, request, jsonify, make_response, abort
+from flask import Flask, request, jsonify, make_response, abort, redirect
 from flask.json import JSONEncoder
 from auth import Auth
 
