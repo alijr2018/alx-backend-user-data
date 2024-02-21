@@ -9,8 +9,6 @@ from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 from user import Base, User
 
-from user import Base
-
 
 class DB:
     """DB class
@@ -64,5 +62,6 @@ class DB:
                 else:
                     raise ValueError(f"Invalid attribute: {key}")
             self._session.commit()
-        except NoResultFound:
-            raise ValueError(f"No user found with id: {user_id}")
+        except InvalidRequestError:
+            self._session.rollback()
+            raise ValueError("Invalid query arguments")
