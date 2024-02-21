@@ -27,7 +27,8 @@ class Auth:
         self._db = DB()
 
     def register_user(self, email: str, password: str) -> User:
-        """Register a new user and return the User object.
+        """
+        add a new user and return the User object.
         """
         try:
             self._db.find_user_by(email=email)
@@ -37,3 +38,14 @@ class Auth:
                                             bcrypt.gensalt())
             user = self._db.add_user(email, hashed_password)
             return user
+
+    def valid_login(self, email: str, password: str) -> bool:
+        """
+        Checking if the logins credentials are valid.
+        """
+        try:
+            user = self._db.find_user_by(email=email)
+            return bcrypt.checkpw(password.encode('utf-8'),
+                                  user.hashed_password)
+        except NoResultFound:
+            return False
