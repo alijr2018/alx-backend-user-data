@@ -60,7 +60,7 @@ class DB:
                 if hasattr(User, key):
                     setattr(user, key, value)
                 else:
-                    raise ValueError
+                    raise ValueError(f"Invalid attribute: {key}")
             self._session.commit()
         except NoResultFound:
-            raise ValueError
+            raise ValueError(f"No user found with id: {user_id}")
