@@ -3,9 +3,12 @@
 app.py
 """
 from flask import Flask, request, jsonify, make_response, abort
+from flask.json import JSONEncoder
 from auth import Auth
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
+app.json_encoder = JSONEncoder
 AUTH = Auth()
 
 
@@ -51,6 +54,25 @@ def login():
         return response
     else:
         abort(401)
+
+
+@app.route('/sessions', methods=['DELETE'])
+def logout():
+    """
+    Logout route to destroy the session and redirect to home.
+    """
+    session_id = request.cookies.get('session_id')
+
+    if not session_id:
+        abort(403)
+
+    user = AUTH.get_user_from_session_id(session_id)
+
+    if not user:
+        abort(403)
+
+    AUTH.destroy_session(user.id)
+    return redirect('/')
 
 
 if __name__ == "__main__":
