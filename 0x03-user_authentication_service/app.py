@@ -23,10 +23,9 @@ def welcome():
 
 
 @app.route('/users', methods=['POST'], strict_slashes=False)
-def register_user() -> str:
-    """POST /users
-    Return:
-        - JSON payload of the form containing various information.
+def users() -> str:
+    """
+    register user
     """
     try:
         email = request.form.get('email')
