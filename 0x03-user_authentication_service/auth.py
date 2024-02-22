@@ -54,16 +54,16 @@ class Auth:
         Checking if the logins credentials are valid.
         """
         try:
+            # Locate the user by email
             user = self._db.find_user_by(email=email)
+            if user is not None:
+                # Check if the password matches using bcrypt
+                password_bytes = password.encode('utf-8')
+                hashed_password = user.hashed_password
+                if bcrypt.checkpw(password_bytes, hashed_password):
+                    return True
         except NoResultFound:
             return False
-
-        user_password = user.hashed_password
-        encoded_password = password.encode()
-
-        if bcrypt.checkpw(encoded_password, user_password):
-            return True
-
         return False
 
     def create_session(self, email: str) -> str:
