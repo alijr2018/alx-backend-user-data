@@ -41,33 +41,36 @@ class DB:
         return user
 
     def find_user_by(self, **kwargs) -> User:
+        """ Finds user by key word args
+        Return: First row found in the users table as filtered by kwargs
         """
-        Find a user
-        """
-        try:
-            user = self._session.query(User).filter_by(**kwargs).one()
-        except NoResultFound:
-            raise NoResultFound
-        except InvalidRequestError:
+        if not kwargs:
             raise InvalidRequestError
+
+        column_names = User.__table__.columns.keys()
+        for key in kwargs.keys():
+            if key not in column_names:
+                raise InvalidRequestError
+
+        user = self._session.query(User).filter_by(**kwargs).first()
+
+        if user is None:
+            raise NoResultFound
 
         return user
 
-    def update_user(self, user_id: int, **kwargs):
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """ Update users attributes
+        Returns: None
         """
-        Update user
-        """
-        try:
-            user = self.find_user_by(id=user_id)
-        except NoResultFound:
-            raise ValueError("No user found with id: {}".format(user_id))
+        user = self.find_user_by(id=user_id)
+
+        column_names = User.__table__.columns.keys()
+        for key in kwargs.keys():
+            if key not in column_names:
+                raise ValueError
 
         for key, value in kwargs.items():
-            if not hasattr(user, key):
-                raise ValueError("Invalid attribute: {}".format(key))
             setattr(user, key, value)
 
-        try:
-            self._session.commit()
-        except InvalidRequestError:
-            raise ValueError("Invalid request")
+        self._session.commit()
