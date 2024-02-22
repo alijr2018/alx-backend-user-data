@@ -44,13 +44,14 @@ class DB:
         """
         Find a user
         """
-    try:
-        user = self._session.query(User).filter_by(**kwargs).one()
+        try:
+            user = self._session.query(User).filter_by(**kwargs).one()
+        except NoResultFound:
+            raise NoResultFound("No user found")
+        except InvalidRequestError:
+            raise InvalidRequestError("Invalid request")
+
         return user
-    except NoResultFound:
-        raise NoResultFound("No user found")
-    except InvalidRequestError:
-        raise InvalidRequestError("Invalid request")
 
     def update_user(self, user_id: int, **kwargs):
         """
