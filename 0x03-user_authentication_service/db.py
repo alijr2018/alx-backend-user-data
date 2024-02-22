@@ -14,7 +14,7 @@ class DB:
     """DB class
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize a new DB instance
         """
         self._engine = create_engine("sqlite:///a.db", echo=False)
@@ -23,7 +23,7 @@ class DB:
         self.__session = None
 
     @property
-    def _session(self):
+    def _session(self) -> Session:
         """Memoized session object
         """
         if self.__session is None:
@@ -46,11 +46,12 @@ class DB:
         """
         try:
             user = self._session.query(User).filter_by(**kwargs).one()
-            return user
         except NoResultFound:
             raise NoResultFound
-        except InvalidRequestError as e:
-            raise InvalidRequestError from e
+        except InvalidRequestError:
+            raise InvalidRequestError
+
+        return user
 
     def update_user(self, user_id: int, **kwargs):
         """
@@ -58,12 +59,15 @@ class DB:
         """
         try:
             user = self.find_user_by(id=user_id)
-            if kwargs:
-                for key, value in kwargs.items():
-                    if hasattr(User, key):
-                        setattr(user, key, value)
-                    else:
-                        raise ValueError
-                self._session.commit()
         except NoResultFound:
-            raise ValueError
+            raise ValueError("No user found with id: {}".format(user_id))
+
+        for key, value in kwargs.items():
+            if not hasattr(user, key):
+                raise ValueError("Invalid attribute: {}".format(key))
+            setattr(user, key, value)
+
+        try:
+            self._session.commit()
+        except InvalidRequestError:
+            raise ValueError("Error")
