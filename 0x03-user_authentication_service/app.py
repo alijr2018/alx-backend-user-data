@@ -3,7 +3,9 @@
 app.py
 """
 from flask import Flask, request, jsonify, abort, redirect
+
 from flask.json import JSONEncoder
+
 from auth import Auth
 
 app = Flask(__name__)
