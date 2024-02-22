@@ -79,7 +79,9 @@ def logout() -> str:
 
 @app.route('/profile', methods=['GET'])
 def profile() -> str:
-    """Profile route to retrieve user information."""
+    """
+    Profile route to retrieve user information.
+    """
     session_id = request.cookies.get('session_id')
 
     if not session_id:
