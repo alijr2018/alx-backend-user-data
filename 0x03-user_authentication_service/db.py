@@ -44,13 +44,20 @@ class DB:
         """
         Find a user
         """
-        try:
-            user = self._session.query(User).filter_by(**kwargs).one()
-            return user
-        except NoResultFound:
-            raise NoResultFound("No user found")
-        except InvalidRequestError:
-            raise InvalidRequestError("Invalid request")
+        if not kwargs:
+            raise InvalidRequestError
+
+        column_names = User.__table__.columns.keys()
+        for key in kwargs.keys():
+            if key not in column_names:
+                raise InvalidRequestError
+
+        user = self._session.query(User).filter_by(**kwargs).first()
+
+        if user is None:
+            raise NoResultFound
+
+        return user
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """
@@ -58,11 +65,18 @@ class DB:
         """
         try:
             user = self.find_user_by(id=user_id)
-            for key, value in kwargs.items():
-                if hasattr(User, key):
-                    setattr(user, key, value)
-                else:
-                    raise ValueError("Invalid attribute: {}".format(key))
-            self._session.commit()
         except NoResultFound:
             raise ValueError("No user found with id: {}".format(user_id))
+
+        column_names = User.__table__.columns.keys()
+        for key in kwargs.keys():
+            if key not in column_names:
+                raise ValueError("Invalid attribute: {}".format(key))
+
+        for key, value in kwargs.items():
+            setattr(user, key, value)
+
+        try:
+            self._session.commit()
+        except InvalidRequestError:
+            raise ValueError("Invalid request")
