@@ -9,6 +9,7 @@ from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 from user import Base, User
 
+
 class DB:
     """DB class
     """
@@ -61,7 +62,7 @@ class DB:
                 if hasattr(User, key):
                     setattr(user, key, value)
                 else:
-                    raise ValueError(f"Invalid attribute: {key}")
+                    raise ValueError
             self._session.commit()
         except NoResultFound:
-            raise ValueError(f"No user found with id: {user_id}")
+            raise ValueError
