@@ -15,7 +15,7 @@ AUTH = Auth()
 
 
 @app.route("/")
-def welcome():
+def welcome() -> str:
     """
     Welcome
     """
