@@ -39,7 +39,7 @@ def users() -> str:
 
 
 @app.route('/sessions', methods=['POST'])
-def login():
+def login() -> str:
     """
     Login endpoint for creating a session.
     """
@@ -59,7 +59,7 @@ def login():
 
 
 @app.route('/sessions', methods=['DELETE'])
-def logout():
+def logout() -> str:
     """
     Logout route to destroy the session and redirect to home.
     """
@@ -78,7 +78,7 @@ def logout():
 
 
 @app.route('/profile', methods=['GET'])
-def profile():
+def profile() -> str:
     """Profile route to retrieve user information."""
     session_id = request.cookies.get('session_id')
 
@@ -94,7 +94,7 @@ def profile():
 
 
 @app.route('/reset_password', methods=['POST'])
-def get_reset_password_token():
+def get_reset_password_token() -> str:
     """
     Generate and return a reset password token.
     """
@@ -110,7 +110,7 @@ def get_reset_password_token():
 
 
 @app.route('/reset_password', methods=['PUT'])
-def update_password():
+def update_password() -> str:
     """Update user password using reset token."""
     try:
         email = request.form['email']
